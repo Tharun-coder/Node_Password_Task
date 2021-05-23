@@ -101,10 +101,7 @@ router.get("/forgot_password/:email", async (req, res) => {
           "Your password reset link is " +
           `http://localhost:3000/auth/password_reset/${rnd}`,
       });
-        res.setHeader({
-        rnd: req.params.rnd,
-        pass: req.params.pass,
-      });
+       
       res.status(200).json({
         message: "Password Reset link send to your mail ID. Please Check",
       });
