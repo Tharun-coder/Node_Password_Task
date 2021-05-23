@@ -92,17 +92,16 @@ router.get("/forgot_password/:email", async (req, res) => {
         },
       });
 
-      let info = await transporter.sendMail({
+       let info = await transporter.sendMail({
         from: "tharunkumar.vijayakumar@gmail.com",
         to: req.params.email,
         subject: "Password Reset Link",
-        text:
-          "Your password reset link is " +
-          `http://localhost:3000/auth/password_reset/${rnd}`,
+        text: "Your password reset secret code is " + rnd,
       });
 
       res.status(200).json({
-        message: "Password Reset link send to your mail ID. Please Check",
+        message:
+          "Secret code to reset the Password send to your mail ID. Please Check",
       });
     } else {
       res.status(404).json({
