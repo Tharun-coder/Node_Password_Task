@@ -85,8 +85,7 @@ router.get("/forgot_password/:email", async (req, res) => {
         service: "gmail",
         tls: {
           rejectUnauthorized: false,
-       
- },
+        },
         auth: {
           user: "tharunkumar.vijayakumar@gmail.com",
           pass: process.env.MAIL_PASS,
@@ -101,7 +100,7 @@ router.get("/forgot_password/:email", async (req, res) => {
           "Your password reset link is " +
           `http://localhost:3000/auth/password_reset/${rnd}`,
       });
-       
+
       res.status(200).json({
         message: "Password Reset link send to your mail ID. Please Check",
       });
@@ -116,16 +115,17 @@ router.get("/forgot_password/:email", async (req, res) => {
   }
 });
 
-router.post("/password_reset/:rnd/:new_pwd", async (req, res) => {
+router.post("/password_reset/:rnd/:pass", async (req, res) => {
   try {
     let client = await MongoClient.connect(dbUrl);
     let db = client.db("Password");
+    console.log(req.params.rnd, req.params.pass);
     let data = await db
       .collection("users")
       .findOne({ randomString: req.params.rnd });
     if (data) {
       let salt = await bcrypt.genSalt(10);
-      let hash = await bcrypt.hash(req.params.new_pwd, salt);
+      let hash = await bcrypt.hash(req.params.pass, salt);
       req.params.new_pwd = hash;
       await db
         .collection("users")
@@ -133,6 +133,8 @@ router.post("/password_reset/:rnd/:new_pwd", async (req, res) => {
           { randomString: req.params.rnd },
           { $set: { password: req.params.new_pwd, randomString: "" } }
         );
+      res.append("rnd", req.params.rnd);
+      res.append("new_pass", req.params.pass);
 
       res.status(200).json({
         message: "Password updated successfully",
