@@ -81,26 +81,26 @@ router.get("/forgot_password/:email", async (req, res) => {
         );
       //Sending link to user mail ID along with random string generated
 
-      let transporter = nodeMailer.createTransport({
-        service: "gmail",
-        tls: {
-          rejectUnauthorized: false,
-        },
-        auth: {
-          user: "tharunkumar.vijayakumar@gmail.com",
-          pass: process.env.MAIL_PASS,
-        },
-      });
+//       let transporter = nodeMailer.createTransport({
+//         service: "gmail",
+//         tls: {
+//           rejectUnauthorized: false,
+       
+//  },
+//         auth: {
+//           user: "tharunkumar.vijayakumar@gmail.com",
+//           pass: process.env.MAIL_PASS,
+//         },
+//       });
 
-      let info = await transporter.sendMail({
-        from: "tharunkumar.vijayakumar@gmail.com",
-        to: req.params.email,
-        subject: "Password Reset Link",
-        text:
-          "Your password reset link is " +
-          `http://localhost:3000/auth/password_reset/${rnd}`,
-      });
-
+//       let info = await transporter.sendMail({
+//         from: "tharunkumar.vijayakumar@gmail.com",
+//         to: req.params.email,
+//         subject: "Password Reset Link",
+//         text:
+//           "Your password reset link is " +
+//           `http://localhost:3000/auth/password_reset/${rnd}`,
+//       });
       res.status(200).json({
         message: "Password Reset link send to your mail ID. Please Check",
       });
