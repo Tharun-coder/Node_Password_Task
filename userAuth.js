@@ -33,13 +33,15 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/login", async (req, res) => {
+router.get("/login/:email/:password", async (req, res) => {
   try {
     let client = await MongoClient.connect(dbUrl);
     let db = client.db("Password");
-    let data = await db.collection("users").findOne({ email: req.body.email });
+    let data = await db
+      .collection("users")
+      .findOne({ email: req.params.email });
     if (data) {
-      let isValid = await bcrypt.compare(req.body.password, data.password);
+      let isValid = await bcrypt.compare(req.params.password, data.password);
       if (isValid) {
         res.status(200).json({
           message: "Login Success",
